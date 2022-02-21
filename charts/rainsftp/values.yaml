@@ -1,0 +1,101 @@
+# Default values for deployment of rainsftp
+# Link to project: https://github.com/decadentsoup/rainsftp
+
+namespace:
+
+sftp:
+  debug: false
+
+  ldap:
+    endpoint: ""
+    baseDN: ""
+    readGroup: ""
+    writeGroup: ""
+
+  s3:
+    endpoint: ""
+    secure: true
+    bucket: ""
+
+  configFromSecret:
+    - name: LDAP_USERNAME
+      valueFrom:
+      secretKeyRef:
+        key: username
+        name: rainsftp_ldap
+    - name: LDAP_PASSWORD
+      valueFrom:
+      secretKeyRef: 
+        key: password
+        name: rainsftp_ldap
+    - name: S3_ACCESSKEY
+      valueFrom:
+      secretKeyRef:
+        key: accesskey
+        name: rainsftp_s3
+    - name: S3_SECRET
+      valueFrom: 
+      secretKeyRef:
+        key: secret
+        name: rainsftp_s3
+    - name: hostKeys
+      valueFrom:
+      secretKeyRef: 
+        key: keys
+        name: rainsftp_hostkeys
+
+replicaCount: 1
+
+image:
+  repository:
+  pullPolicy: IfNotPresent
+  tag:
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+volumes: []
+volumeMounts: []
+envFrom: []
+envVars: []
+env: []
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  annotations: {}
+  type: ClusterIP
+  loadBalancerIP: 
+  loadBalancerSourceRanges: []
+  port: 22
+  nodePort:
+  externalTrafficPolicy:
+  sessionAffinity:
+
+additionalServies: {}
+resources: {}
+
+autoscaling:
+  enabled: false 
+  minRepicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+tolerations: []
+hostNetwork: false 
+
+topologySpreadConstraints:
+  enabled: false 
+  maxSkew: 1
+  topologyKey: topology.kubernetes.io/zone
+  whenUnsatisfiable: DoNotSchedule
