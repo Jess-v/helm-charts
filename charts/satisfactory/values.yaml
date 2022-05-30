@@ -1,0 +1,94 @@
+# Default values for satisfactory.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+satisfactoryOpts:
+  autopause:
+  autosaveInterval: 
+  autosaveNum: 
+  autosaveOnDisconnect: 
+  crashReport:
+  debug:
+  disableSeasonalEvents:
+  maxPlayers:
+  pgid:
+  puid:
+  serverBeaconPort:
+  serverGamePort:
+  serverIP:
+  serverQueryPort:
+  skipUpdate:
+  steamBeta: true
+
+persistentVolumeClaim:
+  enable: true
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 10Gi
+
+image:
+  # Sets Docker image for Satisfactory server, default wolveix/satisfactory-server
+  repository: ""
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+env: []
+envFrom: []
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: "satisfactory-sa"
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+# Ensure targetPort matches port config in satisfactoryOpts
+service:
+  type: LoadBalancer
+  ports:
+  - name: beacon-port
+    port: 15000
+    targetPort: 15000
+    protocol: UDP
+  - name: game-port
+    port: 7777
+    targetPort: 7777
+    protocol: UDP
+  - name: query-port
+    port: 15777
+    targetPort: 15777
+    protocol: UDP
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
