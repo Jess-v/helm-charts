@@ -18,7 +18,7 @@ satisfactoryOpts:
   serverIP:
   serverQueryPort:
   skipUpdate:
-  steamBeta: true
+  steamBeta:
 
 persistentVolumeClaim:
   enable: true
